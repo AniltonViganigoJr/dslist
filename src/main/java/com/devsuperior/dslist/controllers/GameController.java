@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devsuperior.dslist.dto.GameDTO;
 import com.devsuperior.dslist.dto.GameMinDTO;
+import com.devsuperior.dslist.exceptions.ResourceNotFoundException;
 import com.devsuperior.dslist.services.GameService;
 
 @RestController
@@ -21,8 +22,12 @@ public class GameController {
 
 	@GetMapping(value = "/{id}")
 	public GameDTO findById(@PathVariable Long id){
-		GameDTO result = gameService.findById(id);
-		return result;
+		try {
+			GameDTO result = gameService.findById(id);
+			return result;
+		} catch (Exception e) {
+			throw new ResourceNotFoundException("Resource not found with id: " + id);
+		}
 	}
 	
 	@GetMapping
